@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using CoreWebsite.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using CoreWebsite.Models;
 
-namespace CoreWebsite.Controllers
+namespace CoreWebsite.Web.Controllers
 {
     public class HomeController : Controller
     {
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
+        {           
             return View();
         }
 
