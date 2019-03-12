@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CoreWebsite.Data.Models;
+using CoreWebsite.Web.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -16,7 +17,6 @@ namespace CoreWebsite.Web.Controllers
         private readonly IProductsService _productsService;
         private readonly ICategoriesService _categoriesService;
         private readonly ISuppliersService _suppliersService;
-        private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
 
 
@@ -25,14 +25,30 @@ namespace CoreWebsite.Web.Controllers
             _productsService = productsService;
             _categoriesService = categoriesService;
             _suppliersService = suppliersService;
-            _configuration = configuration;
             _logger = logger;
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _productsService.SearchAsync());
+            var products = await _productsService.SearchAsync();
+            var productsViewModels = products.Select(x => new ProductViewModel
+            {
+                ProductId = x.ProductId,
+                CategoryId = x.CategoryId,
+                SupplierId = x.SupplierId,
+                ProductName = x.ProductName,
+                QuantityPerUnit = x.QuantityPerUnit,
+                UnitPrice = x.UnitPrice,
+                UnitsInStock = x.UnitsInStock,
+                UnitsOnOrder = x.UnitsOnOrder,
+                ReorderLevel = x.ReorderLevel,
+                Discontinued = x.Discontinued,
+                Category = x.Category,
+                Supplier = x.Supplier
+            });
+
+            return View(productsViewModels);
         }
 
         // GET: Products/Details/5
@@ -121,10 +137,6 @@ namespace CoreWebsite.Web.Controllers
                     if (!ProductExists(product.ProductId).Result)
                     {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
                     }
                 }
                 return RedirectToAction(nameof(Index));
