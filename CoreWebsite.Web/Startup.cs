@@ -44,21 +44,9 @@ namespace CoreWebsite.Web
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddTransient<IRepository<Product>, ProductsRepository>();
-            services.AddTransient<IRepository<Category>, CategoriesRepository>();
-            services.AddTransient<IRepository<Supplier>, SuppliersRepository>();
-
-            services.AddTransient<IProductsService, ProductsService>();
-            services.AddTransient<ICategoriesService, CategoriesService>();
-            services.AddTransient<ISuppliersService, SuppliersService>();
-            services.AddTransient<ISettingsProvider, SettingsProvider>();
-
-            services.AddTransient<IProductDtoMapper, ProductDtoMapper>();
-            services.AddTransient<ICategoryDtoMapper, CategoryDtoMapper>();
-            services.AddTransient<ISupplierDtoMapper, SupplierDtoMapper>();
-
-            services.AddTransient<IProductViewModelMapper, ProductViewModelMapper>();
-            services.AddTransient<ICategoryViewModelMapper, CategoryViewModelMapper>();
+            ConfigureRepositoryServices(services);
+            ConfigureBllServices(services);
+            ConfigureWebServices(services);
 
             _logger.LogInformation("Registered services");
         }
@@ -101,6 +89,31 @@ namespace CoreWebsite.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void ConfigureBllServices(IServiceCollection services)
+        {
+            services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<ISuppliersService, SuppliersService>();
+            services.AddTransient<ISettingsProvider, SettingsProvider>();
+
+            services.AddTransient<IProductDtoMapper, ProductDtoMapper>();
+            services.AddTransient<ICategoryDtoMapper, CategoryDtoMapper>();
+            services.AddTransient<ISupplierDtoMapper, SupplierDtoMapper>();
+        }
+
+        private void ConfigureRepositoryServices(IServiceCollection services)
+        {
+            services.AddTransient<IRepository<Product>, ProductsRepository>();
+            services.AddTransient<IRepository<Category>, CategoriesRepository>();
+            services.AddTransient<IRepository<Supplier>, SuppliersRepository>();
+        }
+
+        private void ConfigureWebServices(IServiceCollection services)
+        {
+            services.AddTransient<IProductViewModelMapper, ProductViewModelMapper>();
+            services.AddTransient<ICategoryViewModelMapper, CategoryViewModelMapper>();
         }
     }
 }
