@@ -2,10 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CoreWebsite.BLL.Interfaces;
+using CoreWebsite.BLL.Mapping.Interfaces;
+using CoreWebsite.BLL.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CoreWebsite.Data.Models;
+using CoreWebsite.Web.Mapping.Interfaces;
 using CoreWebsite.Web.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -18,35 +21,24 @@ namespace CoreWebsite.Web.Controllers
         private readonly ICategoriesService _categoriesService;
         private readonly ISuppliersService _suppliersService;
         private readonly ILogger _logger;
+        private readonly IProductViewModelMapper _productMapper;
 
 
-        public ProductsController(IProductsService productsService, ICategoriesService categoriesService, ISuppliersService suppliersService, IConfiguration configuration, ILogger<ProductsController> logger)
+        public ProductsController(IProductsService productsService, ICategoriesService categoriesService, ISuppliersService suppliersService, IConfiguration configuration, ILogger<ProductsController> logger, IProductViewModelMapper productMapper)
         {
             _productsService = productsService;
             _categoriesService = categoriesService;
             _suppliersService = suppliersService;
             _logger = logger;
+            _productMapper = productMapper;
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
             var products = await _productsService.SearchAsync();
-            var productsViewModels = products.Select(x => new ProductViewModel
-            {
-                ProductId = x.ProductId,
-                CategoryId = x.CategoryId,
-                SupplierId = x.SupplierId,
-                ProductName = x.ProductName,
-                QuantityPerUnit = x.QuantityPerUnit,
-                UnitPrice = x.UnitPrice,
-                UnitsInStock = x.UnitsInStock,
-                UnitsOnOrder = x.UnitsOnOrder,
-                ReorderLevel = x.ReorderLevel,
-                Discontinued = x.Discontinued,
-                Category = x.Category,
-                Supplier = x.Supplier
-            });
+
+            var productsViewModels = products.Select(x => _productMapper.MapToViewModel(x));
 
             return View(productsViewModels);
         }
@@ -67,7 +59,7 @@ namespace CoreWebsite.Web.Controllers
                 return NotFound();
             }
 
-            return View(product);
+            return View(_productMapper.MapToViewModel(product));
         }
 
         // GET: Products/Create
@@ -83,16 +75,19 @@ namespace CoreWebsite.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(ProductViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                await _productsService.CreateAsync(product);
+                var dto = _productMapper.MapToDto(viewModel);
+                await _productsService.CreateAsync(dto);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(await _categoriesService.GetAllAsync(), "CategoryId", "CategoryName", product.CategoryId);
-            ViewData["SupplierId"] = new SelectList(await _suppliersService.GetAllAsync(), "SupplierId", "CompanyName", product.SupplierId);
-            return View(product);
+
+            ViewData["CategoryId"] = new SelectList(await _categoriesService.GetAllAsync(), "CategoryId", "CategoryName", viewModel.CategoryId);
+            ViewData["SupplierId"] = new SelectList(await _suppliersService.GetAllAsync(), "SupplierId", "CompanyName", viewModel.SupplierId);
+
+            return View(viewModel);
         }
 
         // GET: Products/Edit/5
@@ -108,9 +103,12 @@ namespace CoreWebsite.Web.Controllers
             {
                 return NotFound();
             }
+
+            var viewModel = _productMapper.MapToViewModel(product);
+
             ViewData["CategoryId"] = new SelectList(await _categoriesService.GetAllAsync(), "CategoryId", "CategoryName", product.CategoryId);
             ViewData["SupplierId"] = new SelectList(await _suppliersService.GetAllAsync(), "SupplierId", "CompanyName", product.SupplierId);
-            return View(product);
+            return View(viewModel);
         }
 
         // POST: Products/Edit/5
@@ -118,9 +116,9 @@ namespace CoreWebsite.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product)
+        public async Task<IActionResult> Edit(int id, ProductViewModel viewModel)
         {
-            if (id != product.ProductId)
+            if (id != viewModel.ProductId)
             {
                 return NotFound();
             }
@@ -129,21 +127,21 @@ namespace CoreWebsite.Web.Controllers
             {
                 try
                 {
-                    await _productsService.UpdateAsync(product);
+                    await _productsService.UpdateAsync(_productMapper.MapToDto(viewModel));
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     _logger.LogWarning(ex.Message);
-                    if (!ProductExists(product.ProductId).Result)
+                    if (!ProductExists(viewModel.ProductId).Result)
                     {
                         return NotFound();
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(await _categoriesService.GetAllAsync(), "CategoryId", "CategoryName", product.CategoryId);
-            ViewData["SupplierId"] = new SelectList(await _suppliersService.GetAllAsync(), "SupplierId", "CompanyName", product.SupplierId);
-            return View(product);
+            ViewData["CategoryId"] = new SelectList(await _categoriesService.GetAllAsync(), "CategoryId", "CategoryName", viewModel.CategoryId);
+            ViewData["SupplierId"] = new SelectList(await _suppliersService.GetAllAsync(), "SupplierId", "CompanyName", viewModel.SupplierId);
+            return View(viewModel);
         }
 
         // GET: Products/Delete/5
@@ -154,14 +152,13 @@ namespace CoreWebsite.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _productsService
-                .FindAsync(id.Value);
+            var product = await _productsService.FindAsync(id.Value);
             if (product == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(_productMapper.MapToViewModel(product));
         }
 
         // POST: Products/Delete/5

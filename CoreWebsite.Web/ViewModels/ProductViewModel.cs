@@ -35,8 +35,10 @@ namespace CoreWebsite.Web.ViewModels
         [Required]
         public bool Discontinued { get; set; }
 
-        public Category Category { get; set; }
+        [Display(Name = "Category")]
+        public string CategoryName { get; set; }
 
-        public Supplier Supplier { get; set; }
+        [Display(Name = "Supplier")]
+        public string SupplierName { get; set; }
     }
 }

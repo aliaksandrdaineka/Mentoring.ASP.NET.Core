@@ -1,8 +1,7 @@
-﻿using CoreWebsite.Web;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace CoreWebsite
+namespace CoreWebsite.Web
 {
     public class Program
     {

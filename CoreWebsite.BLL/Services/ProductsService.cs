@@ -4,7 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CoreWebsite.BLL.Interfaces;
+using CoreWebsite.BLL.Mapping.Interfaces;
 using CoreWebsite.BLL.Models;
+using CoreWebsite.BLL.Models.DTO;
 using CoreWebsite.Data;
 using CoreWebsite.Data.Interfaces;
 using CoreWebsite.Data.Models;
@@ -16,47 +18,57 @@ namespace CoreWebsite.BLL.Services
     {
         private readonly DataContext _context;
         private readonly IRepository<Product> _productsRepository;
+        private readonly IProductDtoMapper _productMapper;
         private readonly int _maxProductsCountDefault;
 
 
-        public ProductsService(DataContext context, IRepository<Product> productsRepository, ISettingsProvider settings)
+        public ProductsService(DataContext context, IRepository<Product> productsRepository, ISettingsProvider settings, IProductDtoMapper productMapper)
         {
             _context = context;
             _productsRepository = productsRepository;
+            _productMapper = productMapper;
             _maxProductsCountDefault = settings.GetMaximumProductsCount;
         }
 
-        public async Task<Product> CreateAsync(Product item)
+        public async Task<ProductDto> CreateAsync(ProductDto item)
         {
-            return await _productsRepository.CreateAsync(item);
+            var product = _productMapper.MapToEntity(item);
+            var savedProduct = await _productsRepository.CreateAsync(product);
+            return _productMapper.MapToDto(savedProduct);
         }
 
-        public async Task<Product> UpdateAsync(Product item)
+        public async Task<ProductDto> UpdateAsync(ProductDto item)
         {
-            return await _productsRepository.UpdateAsync(item);
+            var product = _productMapper.MapToEntity(item);
+            var savedProduct = await _productsRepository.UpdateAsync(product);
+            return _productMapper.MapToDto(savedProduct);
         }
 
-        public async Task RemoveAsync(Product item)
+        public async Task RemoveAsync(ProductDto item)
         {
-            await _productsRepository.RemoveAsync(item);
+            var product = _productMapper.MapToEntity(item);
+            await _productsRepository.RemoveAsync(product);
         }
 
-        public async Task<Product> FindAsync(int id)
+        public async Task<ProductDto> FindAsync(int id)
         {
-            return await _productsRepository.FindAsync(id);
+            var product = await _productsRepository.FindAsync(id);
+            return _productMapper.MapToDto(product);
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public async Task<IEnumerable<ProductDto>> GetAllAsync()
         {
-            return await _productsRepository.GetAllAsync();
+            var products = await _productsRepository.GetAllAsync();
+            return products.Select(x => _productMapper.MapToDto(x));
         }
 
-        public async Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> expression)
+        public async Task<IEnumerable<ProductDto>> FindAsync(Expression<Func<Product, bool>> expression)
         {
-            return await _productsRepository.FindAsync(expression);
+            var products = await _productsRepository.FindAsync(expression);
+            return products.Select(x => _productMapper.MapToDto(x));
         }
 
-        public async Task<IEnumerable<Product>> SearchAsync(ProductSearchModel searchModel = null)
+        public async Task<IEnumerable<ProductDto>> SearchAsync(ProductSearchModel searchModel = null)
         {
             IQueryable<Product> query = _context.Products
                 .Include(x => x.Category)
@@ -70,7 +82,7 @@ namespace CoreWebsite.BLL.Services
                 query = query.Take(_maxProductsCountDefault);
             }
 
-            return await query.ToListAsync();
+            return await query.Select(x => _productMapper.MapToDto(x)).ToListAsync();
         }
     }
 }

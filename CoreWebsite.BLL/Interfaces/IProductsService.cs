@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CoreWebsite.BLL.Models;
+using CoreWebsite.BLL.Models.DTO;
 using CoreWebsite.Data.Models;
 
 namespace CoreWebsite.BLL.Interfaces
 {
     public interface IProductsService
     {
-        Task<Product> FindAsync(int id);
+        Task<ProductDto> FindAsync(int id);
 
-        Task<Product> CreateAsync(Product item);
+        Task<ProductDto> CreateAsync(ProductDto item);
 
-        Task<Product> UpdateAsync(Product item);
+        Task<ProductDto> UpdateAsync(ProductDto item);
 
-        Task RemoveAsync(Product item);
+        Task RemoveAsync(ProductDto item);
 
-        Task<IEnumerable<Product>> GetAllAsync();
+        Task<IEnumerable<ProductDto>> GetAllAsync();
 
-        Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> expression);
+        Task<IEnumerable<ProductDto>> FindAsync(Expression<Func<Product, bool>> expression);
 
-        Task<IEnumerable<Product>> SearchAsync(ProductSearchModel searchModel = null);
+        Task<IEnumerable<ProductDto>> SearchAsync(ProductSearchModel searchModel = null);
     }
 }

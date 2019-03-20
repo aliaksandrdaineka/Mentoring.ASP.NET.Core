@@ -1,12 +1,15 @@
 ﻿using CoreWebsite.BLL.Interfaces;
+using CoreWebsite.BLL.Mapping;
+using CoreWebsite.BLL.Mapping.Interfaces;
 using CoreWebsite.BLL.Services;
 using CoreWebsite.Data;
 using CoreWebsite.Data.Interfaces;
 using CoreWebsite.Data.Models;
 using CoreWebsite.Data.Repositories;
+using CoreWebsite.Web.Mapping;
+using CoreWebsite.Web.Mapping.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -49,13 +52,21 @@ namespace CoreWebsite.Web
             services.AddTransient<ISuppliersService, SuppliersService>();
             services.AddTransient<ISettingsProvider, SettingsProvider>();
 
-            _logger.LogInformation("Services added");
+            services.AddTransient<IProductDtoMapper, ProductDtoMapper>();
+            services.AddTransient<ICategoryDtoMapper, CategoryDtoMapper>();
+            services.AddTransient<ISupplierDtoMapper, SupplierDtoMapper>();
+
+            services.AddTransient<IProductViewModelMapper, ProductViewModelMapper>();
+            services.AddTransient<ICategoryViewModelMapper, CategoryViewModelMapper>();
+
+            _logger.LogInformation("Registered services");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddFile(Configuration.GetSection("Logging"));
+
 
             if (env.IsDevelopment())
             {
