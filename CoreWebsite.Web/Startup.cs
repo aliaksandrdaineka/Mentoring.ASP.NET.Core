@@ -1,4 +1,5 @@
-﻿using CoreWebsite.BLL.Interfaces;
+﻿using System.Text;
+using CoreWebsite.BLL.Interfaces;
 using CoreWebsite.BLL.Mapping;
 using CoreWebsite.BLL.Mapping.Interfaces;
 using CoreWebsite.BLL.Services;
@@ -63,9 +64,20 @@ namespace CoreWebsite.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
             loggerFactory.AddFile(Configuration.GetSection("Logging"));
+
+            applicationLifetime.ApplicationStarted.Register(() =>
+            {
+                var sb = new StringBuilder("Application started. Application configuration:\n");
+              
+                foreach (var conf in Configuration.AsEnumerable())
+                {
+                    sb.Append($"{conf.Key}:\t{conf.Value}\n");
+                }
+                _logger.LogInformation(sb.ToString());
+            });
 
 
             if (env.IsDevelopment())
