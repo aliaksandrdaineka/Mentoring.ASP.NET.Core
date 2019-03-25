@@ -15,7 +15,8 @@ namespace CoreWebsite.BLL.Mapping
             {
                 CategoryId = item.CategoryId,
                 CategoryName = item.CategoryName,
-                Description = item.Description
+                Description = item.Description,
+                Picture = item.Picture
             };
         }
 
@@ -28,7 +29,8 @@ namespace CoreWebsite.BLL.Mapping
             {
                 CategoryId = item.CategoryId,
                 CategoryName = item.CategoryName,
-                Description = item.Description
+                Description = item.Description,
+                Picture = item.Picture
             };
         }
     }

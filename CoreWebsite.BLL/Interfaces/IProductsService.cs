@@ -10,7 +10,7 @@ namespace CoreWebsite.BLL.Interfaces
 {
     public interface IProductsService
     {
-        Task<ProductDto> FindAsync(int id);
+        Task<ProductDto> GetByIdAsync(int id);
 
         Task<ProductDto> CreateAsync(ProductDto item);
 

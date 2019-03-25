@@ -50,7 +50,7 @@ namespace CoreWebsite.BLL.Services
             await _productsRepository.RemoveAsync(product);
         }
 
-        public async Task<ProductDto> FindAsync(int id)
+        public async Task<ProductDto> GetByIdAsync(int id)
         {
             var product = await _productsRepository.FindAsync(id);
             return _productMapper.MapToDto(product);

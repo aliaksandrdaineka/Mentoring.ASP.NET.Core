@@ -17,9 +17,9 @@ namespace CoreWebsite.Data.Repositories
             _context = context;
         }
 
-        public Task<Category> FindAsync(int id)
+        public async Task<Category> FindAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Categories.FindAsync(id);
         }
 
         public async Task<IEnumerable<Category>> GetAllAsync()

@@ -1,4 +1,6 @@
-﻿namespace CoreWebsite.Web.ViewModels
+﻿using Microsoft.AspNetCore.Http;
+
+namespace CoreWebsite.Web.ViewModels
 {
     public class CategoryViewModel
     {
@@ -7,5 +9,7 @@
         public string CategoryName { get; set; }
 
         public string Description { get; set; }
+
+        public IFormFile Picture { get; set; }
     }
 }

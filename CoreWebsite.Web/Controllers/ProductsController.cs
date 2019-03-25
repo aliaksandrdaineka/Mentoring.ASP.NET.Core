@@ -24,7 +24,7 @@ namespace CoreWebsite.Web.Controllers
         private readonly IProductViewModelMapper _productMapper;
 
 
-        public ProductsController(IProductsService productsService, ICategoriesService categoriesService, ISuppliersService suppliersService, IConfiguration configuration, ILogger<ProductsController> logger, IProductViewModelMapper productMapper)
+        public ProductsController(IProductsService productsService, ICategoriesService categoriesService, ISuppliersService suppliersService, ILogger<ProductsController> logger, IProductViewModelMapper productMapper)
         {
             _productsService = productsService;
             _categoriesService = categoriesService;
@@ -52,7 +52,7 @@ namespace CoreWebsite.Web.Controllers
             }
 
             _logger.LogInformation($"Getting product with ID = {id}");
-            var product = await _productsService.FindAsync(id.Value);
+            var product = await _productsService.GetByIdAsync(id.Value);
             if (product == null)
             {
                 _logger.LogWarning($"Product with ID = {id} is not found");
@@ -98,7 +98,7 @@ namespace CoreWebsite.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _productsService.FindAsync(id.Value);
+            var product = await _productsService.GetByIdAsync(id.Value);
             if (product == null)
             {
                 return NotFound();
@@ -152,7 +152,7 @@ namespace CoreWebsite.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _productsService.FindAsync(id.Value);
+            var product = await _productsService.GetByIdAsync(id.Value);
             if (product == null)
             {
                 return NotFound();
@@ -166,7 +166,7 @@ namespace CoreWebsite.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _productsService.FindAsync(id);
+            var product = await _productsService.GetByIdAsync(id);
             await _productsService.RemoveAsync(product);
             return RedirectToAction(nameof(Index));
         }

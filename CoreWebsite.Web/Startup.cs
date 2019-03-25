@@ -7,8 +7,11 @@ using CoreWebsite.Data;
 using CoreWebsite.Data.Interfaces;
 using CoreWebsite.Data.Models;
 using CoreWebsite.Data.Repositories;
+using CoreWebsite.Web.Filters;
+using CoreWebsite.Web.Infrastructure;
 using CoreWebsite.Web.Mapping;
 using CoreWebsite.Web.Mapping.Interfaces;
+using CoreWebsite.Web.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +45,12 @@ namespace CoreWebsite.Web
             //});
 
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(
+                options =>
+                {
+                    options.Filters.Add(new ActionLoggingFilterFactory());
+                }
+            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             ConfigureRepositoryServices(services);
             ConfigureBllServices(services);
@@ -67,6 +75,7 @@ namespace CoreWebsite.Web
                 _logger.LogInformation(sb.ToString());
             });
 
+            app.UseMiddleware<ImageCachingMiddleware>();
 
             if (env.IsDevelopment())
             {
@@ -87,7 +96,14 @@ namespace CoreWebsite.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}"
+                );
+
+                routes.MapRoute(
+                    name: "inages",
+                    template: "images/{id}",
+                    defaults: new { controller = "Categories", action = "GetPicture" }
+                );
             });
         }
 
@@ -114,6 +130,7 @@ namespace CoreWebsite.Web
         {
             services.AddTransient<IProductViewModelMapper, ProductViewModelMapper>();
             services.AddTransient<ICategoryViewModelMapper, CategoryViewModelMapper>();
+            services.AddSingleton<ICacher<byte[]>, ImageCacher>();
         }
     }
 }

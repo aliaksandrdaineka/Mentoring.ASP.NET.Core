@@ -18,6 +18,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
+            <th>Picture</th>
             <th></th>
         </tr>
     </thead>
@@ -31,9 +32,15 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                <a asp-action="DownloadPicture" asp-route-id="@item.CategoryId">
+                    <img src="@Url.Action("GetPicture", "Categories", new { id = item.CategoryId })" />
+                </a>
+                
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>             
             </td>
         </tr>
 }
