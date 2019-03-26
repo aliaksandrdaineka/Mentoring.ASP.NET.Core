@@ -12,7 +12,6 @@ namespace CoreWebsite.Web.Filters
     public class ActionLoggingFilter : IAsyncActionFilter
     {
         private readonly ILoggerFactory _loggerFactory;
-        private readonly ISettingsProvider _settingsProvider;
 
         private bool IsParametersLoggingEnabled { get; }
 
@@ -29,7 +28,7 @@ namespace CoreWebsite.Web.Filters
             logger.LogInformation("Action started");
 
             if (IsParametersLoggingEnabled)
-
+                LogParameters(context, logger);
 
             await next();
 
