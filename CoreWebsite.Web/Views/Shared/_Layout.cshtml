@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CoreWebsite</title>
 
+    @if(IsSectionDefined("Headers")) {
+        RenderSection("Headers", required: false);
+    }
+    else
+    {
+    <script>
+        console.log("Message which appears when Headers section is not set.")
+    </script>
+    }
+
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     </environment>
@@ -50,7 +60,7 @@
     </div>
 
     <footer class="border-top footer text-muted">
-
+        @RenderSection("Footers", required: false)
     </footer>
 
     <environment include="Development">

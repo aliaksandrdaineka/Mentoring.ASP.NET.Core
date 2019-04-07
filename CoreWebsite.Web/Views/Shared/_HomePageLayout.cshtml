@@ -1,0 +1,37 @@
+﻿
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Page with second layout";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+@{IgnoreBody();}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mb-2">
+            <div class="card">
+                <div class="card-header">Categories</div>
+                <div class="card-body">
+                    <h5 class="card-title">Categories page</h5>
+                    <div class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</div>
+                    <a asp-action="Index" asp-controller="Categories">Go categories</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" mb-2>
+            <div class="card">
+                <div class="card-header">Products</div>
+                <div class="card-body">
+                    <h5 class="card-title">Products page</h5>
+                    <div class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</div>
+                    <a asp-action="Index" asp-controller="Products">Go products</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
