@@ -1,11 +1,10 @@
 ﻿@model IEnumerable<CategoryViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Categories";
 }
-
-<h1>Categories</h1>
-
+<h1>@ViewData["Title"]</h1>
+<hr />
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -23,34 +22,35 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-action="DownloadPicture" asp-route-id="@item.CategoryId">
-                    <img src="@Url.Action("GetPicture", "Categories", new { id = item.CategoryId })" />
-                </a>
-                
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>             
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-action="DownloadPicture" asp-route-id="@item.CategoryId">
+                        <img src="@Url.Action("GetPicture", "Categories", new { id = item.CategoryId })" />
+                    </a>
+
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
-@section  Footers{ 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">User cannot edit categories</div>
-    </div>
+@section Footers{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">User cannot edit categories</div>
+        </div>
     </div>
 }
