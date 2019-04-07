@@ -37,9 +37,12 @@ namespace CoreWebsite.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Category> UpdateAsync(Category item)
+        public async Task<Category> UpdateAsync(Category item)
         {
-            throw new NotImplementedException();
+            _context.Attach(item).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return item;
         }
 
         public Task RemoveAsync(Category item)

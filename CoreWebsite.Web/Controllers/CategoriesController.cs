@@ -79,23 +79,23 @@ namespace CoreWebsite.Web.Controllers
                 return NotFound();
             }
 
-            if (model.Picture == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            using (var stream = new MemoryStream())
+            if (model.Picture != null)
             {
-                await model.Picture.CopyToAsync(stream);
-                await _categoriesService.UpdatePictureAsync(model.CategoryId, stream.ToArray());
+                using (var stream = new MemoryStream())
+                {
+                    await model.Picture.CopyToAsync(stream);
+                    await _categoriesService.UpdatePictureAsync(model.CategoryId, stream.ToArray());
+                }
+
+                return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Index));
+            return View(model);
         }
     }
 }
