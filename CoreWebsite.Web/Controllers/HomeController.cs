@@ -14,6 +14,7 @@ namespace CoreWebsite.Web.Controllers
         {
             _logger = logger;
         }
+
         public IActionResult Index()
         {           
             return View();

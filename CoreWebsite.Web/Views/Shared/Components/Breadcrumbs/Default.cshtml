@@ -1,0 +1,11 @@
+﻿@model IEnumerable<BreadcrumbsViewModel>
+
+<nav>
+    <ol class="breadcrumb">
+        @foreach(var item in Model.SkipLast(1))
+        {
+            <li class="breadcrumb-item"><a asp-action="@item.ActionName" asp-controller="@item.ControllerName">@item.DisplayName</a></li>
+        }
+        <li class="breadcrumb-item">@Model.Last().DisplayName</li>
+    </ol>
+</nav>

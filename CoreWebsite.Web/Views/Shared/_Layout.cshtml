@@ -53,6 +53,12 @@
         </nav>
     </header>
     <div class="container">
+
+        @if (ViewContext.RouteData.Values["controller"].ToString() != "Home")
+        {
+            @await Component.InvokeAsync("Breadcrumbs")
+        }
+
         @*<partial name="_CookieConsentPartial" />*@
         <main role="main" class="pb-3">
             @RenderBody()

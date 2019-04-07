@@ -12,6 +12,7 @@ using CoreWebsite.Web.Mapping.Interfaces;
 using CoreWebsite.Web.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel;
 
 namespace CoreWebsite.Web.Controllers
 {
@@ -75,6 +76,7 @@ namespace CoreWebsite.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [DisplayName("Create New")]
         public async Task<IActionResult> Create(ProductViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -91,6 +93,7 @@ namespace CoreWebsite.Web.Controllers
         }
 
         // GET: Products/Edit/5
+        [DisplayName("Edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
