@@ -30,5 +30,48 @@ namespace CoreWebsite.Api.Controllers
 
             return Ok(products);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductDto>> Get(int id)
+        {
+            var product = await _productsService.GetByIdAsync(id);
+
+            if (product == null)
+                return NotFound();
+
+            return product;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ProductDto>> Post([FromBody] ProductDto product)
+        {
+            var productCreated = await _productsService.CreateAsync(product);
+            return CreatedAtAction(nameof(Get), new { id = product.ProductId }, product);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] ProductDto product)
+        {
+            if (id != product.ProductId)
+            {
+                return BadRequest();
+            }
+
+            await _productsService.UpdateAsync(product);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ProductDto>> Delete(int id)
+        {
+            var product = await _productsService.GetByIdAsync(id);
+            if (product == null)
+                return NotFound();
+
+            await _productsService.RemoveAsync(product);
+
+            return NoContent();
+        }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CoreWebsite.BLL.Interfaces;
 using CoreWebsite.BLL.Models.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoreWebsite.Api.Controllers
@@ -28,6 +30,32 @@ namespace CoreWebsite.Api.Controllers
                 return NotFound();
 
             return Ok(categories);
+        }
+
+        [HttpGet("{id}/image")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var image = await _categoriesService.GetPictureAsync(id);
+
+            if (image == null)
+                return NotFound();
+
+            return Ok(image);
+        }
+        
+        [HttpPatch("{id}/image")]
+        public async Task<IActionResult> UpdateImage(int id, [FromBody] IFormFile file)
+        {
+            if (file.Length == 0 || file.ContentType != "image/bmp")
+                return BadRequest();
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                await _categoriesService.UpdatePictureAsync(id, memoryStream.ToArray());
+            }
+
+            return NoContent();
         }
 
     }
