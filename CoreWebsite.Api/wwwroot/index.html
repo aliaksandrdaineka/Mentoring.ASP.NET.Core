@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>.NET Core Mentoring App</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <h2 class="text-center mb-3">Web API with js and jQuery</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">Categories</div>
+                    <div class="card-body">
+                        <ul class="list-group" id="categories"></ul>
+                        <a href="javascript:void(0);" class="btn btn-primary" id="loadCategories">Load</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">Products</div>
+                    <div class="card-body">
+                        <ul class="list-group" id="products"></ul>
+                        <a href="javascript:void(0);" class="btn btn-primary" id="loadProducts">Load</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#loadProducts').click(function () {
+                var self = $(this);
+                $.getJSON('api/products')
+                    .done(function (data) {
+                        $.each(data, function (key, item) {
+                            debugger;
+                            $('<li>', { 'class': 'list-group-item', text: item.productName + ' ' + item.unitPrice }).appendTo($('#products'));
+                        })
+                        self.remove();
+                    })
+            })
+
+            $('#loadCategories').click(function () {
+                var self = $(this);
+                $.getJSON('api/categories')
+                    .done(function (data) {
+                        $.each(data, function (key, item) {
+                            debugger;
+                            $('<li>', { 'class': 'list-group-item', text: item.categoryName }).appendTo($('#categories'));
+                        })
+                        self.remove();
+                    })
+            })
+        });
+    </script>
+</body>
+</html>

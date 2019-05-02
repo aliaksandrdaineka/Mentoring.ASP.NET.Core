@@ -19,7 +19,7 @@ namespace CoreWebsite.Api.Controllers
             _categoriesService = categoriesService;
         }
 
-        // GET api/values
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> Get()
         {
             var categories = await _categoriesService.GetAllAsync();

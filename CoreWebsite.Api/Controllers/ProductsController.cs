@@ -20,7 +20,7 @@ namespace CoreWebsite.Api.Controllers
             _productsService = productsService;
         }
 
-        // GET api/values
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> Get()
         {
             var products = await _productsService.GetAllAsync();
