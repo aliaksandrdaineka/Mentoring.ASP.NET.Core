@@ -1,0 +1,273 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "My API"
+  },
+  "paths": {
+    "/api/Categories": {
+      "get": {
+        "tags": [ "Categories" ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": { "$ref": "#/definitions/CategoryDto" }
+            }
+          }
+        }
+      }
+    },
+    "/api/Categories/{id}/image": {
+      "get": {
+        "tags": [ "Categories" ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": { "200": { "description": "Success" } }
+      },
+      "patch": {
+        "tags": [ "Categories" ],
+        "operationId": "UpdateImage",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "file",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/IFormFile" }
+          }
+        ],
+        "responses": { "200": { "description": "Success" } }
+      }
+    },
+    "/api/Products": {
+      "get": {
+        "tags": [ "Products" ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": { "$ref": "#/definitions/ProductDto" }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [ "Products" ],
+        "operationId": "Post",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "product",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/ProductDto" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/ProductDto" }
+          }
+        }
+      }
+    },
+    "/api/Products/{id}": {
+      "get": {
+        "tags": [ "Products" ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/ProductDto" }
+          }
+        }
+      },
+      "put": {
+        "tags": [ "Products" ],
+        "operationId": "Put",
+        "consumes": [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "product",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/ProductDto" }
+          }
+        ],
+        "responses": { "200": { "description": "Success" } }
+      },
+      "delete": {
+        "tags": [ "Products" ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [ "text/plain", "application/json", "text/json" ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": { "$ref": "#/definitions/ProductDto" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CategoryDto": {
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "categoryName": { "type": "string" },
+        "description": { "type": "string" },
+        "picture": {
+          "format": "byte",
+          "type": "string"
+        }
+      }
+    },
+    "IFormFile": {
+      "type": "object",
+      "properties": {
+        "contentType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "contentDisposition": {
+          "type": "string",
+          "readOnly": true
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "uniqueItems": false,
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "readOnly": true
+        },
+        "length": {
+          "format": "int64",
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "fileName": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "ProductDto": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "productName": { "type": "string" },
+        "supplierId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "categoryId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "quantityPerUnit": { "type": "string" },
+        "unitPrice": {
+          "format": "double",
+          "type": "number"
+        },
+        "unitsInStock": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "unitsOnOrder": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "reorderLevel": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "discontinued": { "type": "boolean" },
+        "category": { "$ref": "#/definitions/CategoryDto" },
+        "supplier": { "$ref": "#/definitions/SupplierDto" }
+      }
+    },
+    "SupplierDto": {
+      "type": "object",
+      "properties": {
+        "supplierId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "companyName": { "type": "string" }
+      }
+    }
+  }
+}

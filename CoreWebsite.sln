@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreWebsite.Web.Tests", "Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreWebsite.Api", "CoreWebsite.Api\CoreWebsite.Api.csproj", "{CB6775B8-5EBD-4839-91B5-85B3B1BC98D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreWebsite.Api.ConsoleClient", "CoreWebsite.Api.ConsoleClient\CoreWebsite.Api.ConsoleClient.csproj", "{79D71F7D-E457-462A-85A3-09BAB0C01863}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreWebsite.Api.ConsoleClient", "CoreWebsite.Api.ConsoleClient\CoreWebsite.Api.ConsoleClient.csproj", "{79D71F7D-E457-462A-85A3-09BAB0C01863}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

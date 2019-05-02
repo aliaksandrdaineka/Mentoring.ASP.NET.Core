@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CoreWebsite.Api.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -42,7 +43,25 @@ namespace CoreWebsite.Api.Controllers
             return product;
         }
 
+        /// <summary>
+        /// Creates a Product.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /Todo
+        ///     {
+        ///        "id": 1,
+        ///        "name": "Item1",
+        ///        "isComplete": true
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Returns the newly created item</response>
+        /// <response code="400">If the item is null</response>       
         [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<ProductDto>> Post([FromBody] ProductDto product)
         {
             var productCreated = await _productsService.CreateAsync(product);
@@ -62,6 +81,9 @@ namespace CoreWebsite.Api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes a specific Product
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<ActionResult<ProductDto>> Delete(int id)
         {
