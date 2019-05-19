@@ -34,29 +34,31 @@
     <script>
         $(document).ready(function () {
 
-            $('#loadProducts').click(function () {
+            $('#loadProducts').click(function() {
                 var self = $(this);
                 $.getJSON('api/products')
-                    .done(function (data) {
-                        $.each(data, function (key, item) {
-                            debugger;
-                            $('<li>', { 'class': 'list-group-item', text: item.productName + ' ' + item.unitPrice }).appendTo($('#products'));
-                        })
+                    .done(function(data) {
+                        $.each(data,
+                            function(key, item) {
+                                $('<li>', { 'class': 'list-group-item', text: item.productName + ' ' + item.unitPrice })
+                                    .appendTo($('#products'));
+                            });
                         self.remove();
-                    })
-            })
+                    });
+            });
 
-            $('#loadCategories').click(function () {
+            $('#loadCategories').click(function() {
                 var self = $(this);
                 $.getJSON('api/categories')
-                    .done(function (data) {
-                        $.each(data, function (key, item) {
-                            debugger;
-                            $('<li>', { 'class': 'list-group-item', text: item.categoryName }).appendTo($('#categories'));
-                        })
+                    .done(function(data) {
+                        $.each(data,
+                            function(key, item) {
+                                $('<li>', { 'class': 'list-group-item', text: item.categoryName })
+                                    .appendTo($('#categories'));
+                            });
                         self.remove();
-                    })
-            })
+                    });
+            });
         });
     </script>
 </body>

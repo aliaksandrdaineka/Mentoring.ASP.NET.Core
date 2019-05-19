@@ -29,10 +29,13 @@ namespace CoreWebsite.Web.Components
 
             var action = ViewContext.ActionDescriptor as ControllerActionDescriptor;
 
+            if (action == null)
+                return View(Breadcrumbs);
+
             if (!action.ControllerName.Equals(_defaultControllerName, StringComparison.InvariantCultureIgnoreCase))
                 Breadcrumbs.Add(new BreadcrumbsViewModel(action.ControllerName, _defaultActionName, action.ControllerName));
 
-            string currentPageTitle = ViewData["Title"] != null ? ViewData["Title"].ToString() : action.ActionName;
+            var currentPageTitle = ViewData["Title"] != null ? ViewData["Title"].ToString() : action.ActionName;
 
             if (!action.ActionName.Equals(_defaultActionName, StringComparison.InvariantCultureIgnoreCase))
                 Breadcrumbs.Add(new BreadcrumbsViewModel(currentPageTitle, action.ActionName, action.ControllerName));

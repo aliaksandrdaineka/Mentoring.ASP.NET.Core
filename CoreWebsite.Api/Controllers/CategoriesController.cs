@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CoreWebsite.Api.Models;
 using CoreWebsite.BLL.Interfaces;
 using CoreWebsite.BLL.Models.DTO;
 using Microsoft.AspNetCore.Http;
@@ -45,14 +46,14 @@ namespace CoreWebsite.Api.Controllers
         }
         
         [HttpPatch("{id}/image")]
-        public async Task<IActionResult> UpdateImage(int id, [FromBody] IFormFile file)
+        public async Task<IActionResult> UpdateImage(int id, [FromBody] CategoryImageUpload image)
         {
-            if (file.Length == 0 || file.ContentType != "image/bmp")
+            if (image.File.Length == 0 || image.File.ContentType != "image/bmp")
                 return BadRequest();
 
             using (var memoryStream = new MemoryStream())
             {
-                await file.CopyToAsync(memoryStream);
+                await image.File.CopyToAsync(memoryStream);
                 await _categoriesService.UpdatePictureAsync(id, memoryStream.ToArray());
             }
 
