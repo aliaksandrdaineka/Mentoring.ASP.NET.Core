@@ -12,8 +12,11 @@ using CoreWebsite.Web.Infrastructure;
 using CoreWebsite.Web.Mapping;
 using CoreWebsite.Web.Mapping.Interfaces;
 using CoreWebsite.Web.Middleware;
+using CoreWebsite.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,7 +47,19 @@ namespace CoreWebsite.Web
             //    options.MinimumSameSitePolicy = SameSiteMode.None;
             //});
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
+
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+
             services.AddMvc(
                 options =>
                 {
@@ -57,6 +72,7 @@ namespace CoreWebsite.Web
             ConfigureWebServices(services);
 
             _logger.LogInformation("Registered services");
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,6 +106,7 @@ namespace CoreWebsite.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             //app.UseCookiePolicy();
 
             app.UseMvc(routes =>
