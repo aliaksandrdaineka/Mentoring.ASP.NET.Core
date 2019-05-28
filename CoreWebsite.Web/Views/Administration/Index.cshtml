@@ -1,0 +1,23 @@
+﻿@model IEnumerable<CoreWebsite.Web.Models.CoreWebsiteUser>
+@{
+    ViewData["Title"] = "Users List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Users List</h2>
+    <div class="row">
+        <div class="col-md-12">
+
+            <ul class="list-group">
+                @foreach (var user in Model)
+                {
+                    <li class="list-group-item">
+                        @user.Email @user.Id
+                    </li>
+                }
+            </ul>
+
+        </div>
+    </div>
+</div>

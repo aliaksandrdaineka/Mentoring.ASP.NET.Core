@@ -24,6 +24,7 @@ namespace CoreWebsite.Web.Areas.Identity
                         //config.SignIn.RequireConfirmedEmail = true;
                     })
                     .AddEntityFrameworkStores<CoreWebsiteIdentityContext>()
+                    .AddRoleManager<RoleManager<IdentityRole>>()
                     .AddDefaultTokenProviders();
 
                 //services.AddIdentity<CoreWebsiteUser, IdentityRole>(config =>
