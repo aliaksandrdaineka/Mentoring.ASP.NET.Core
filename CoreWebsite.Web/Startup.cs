@@ -12,10 +12,9 @@ using CoreWebsite.Web.Infrastructure;
 using CoreWebsite.Web.Mapping;
 using CoreWebsite.Web.Mapping.Interfaces;
 using CoreWebsite.Web.Middleware;
-using CoreWebsite.Web.Models;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +52,13 @@ namespace CoreWebsite.Web
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
+
+            services.AddAuthentication()
+                .AddOpenIdConnect(AzureADDefaults.AuthenticationScheme, "Azure AD", options =>
+                {
+                    Configuration.Bind("AzureAd", options);
+                })
+                .AddCookie();
 
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
