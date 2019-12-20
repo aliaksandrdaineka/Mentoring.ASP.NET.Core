@@ -67,11 +67,13 @@ namespace CoreWebsite.Web
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddMvc(
-                options =>
-                {
-                    options.Filters.Add(new ActionLoggingFilterFactory());
-                }
-            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                    options =>
+                    {
+                        options.Filters.Add(new ActionLoggingFilterFactory());
+                    }
+                )
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddRazorOptions(options => options.AllowRecompilingViewsOnFileChange = true);
 
             ConfigureRepositoryServices(services);
             ConfigureBllServices(services);
